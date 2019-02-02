@@ -10,18 +10,18 @@
 - name: Install server
   hosts: production_servers
   remote_user: ubuntu
-  gather_facts: false
+  gather_facts: true
   become: true
   roles:
     #- { role: 'nginx' }
     #- { role: 'certbot', domains: ['geekodour.xyz','*.geekodour.xyz']}
     #- { role: 'common' }
     #- { role: 'blog', domain: 'geekodour.xyz', rootdir: '/srv/www/blog/public'}
-    - { role: 'ishani', domain: 'ishani.geekodour.xyz', rootdir: '/srv/www/ishani' }
+    #- { role: 'ishani', domain: 'ishani.geekodour.xyz', rootdir: '/srv/www/ishani' }
     #- { role: 'dummy', domain: 'dummy.geekodour.xyz', rootdir: '/srv/www/dummy' }
-    #- { role: 'precog', domain: 'movie.geekodour.xyz', rootdir: '/srv/www/precog'  }
-    #- { role: 'dokuwiki' }
-    #- { role: 'wikianimal', domain: 'wiki.geekodour.xyz' }
+    #- { role: 'php' }
+    - { role: 'dokuwiki', domain: '*.geekodour.xyz'}
+    - { role: 'wikianimal', domain: 'wiki.geekodour.xyz' }
     #- { role: 'prometheus' }
     #- { role: 'alertmanager' }
     #- { role: 'grafana', domain: 'probe.geekodour.xyz' }

@@ -13,6 +13,11 @@
     group: "{{ web_group }}"
   become: yes
 
+- name: check if {{ domain }} exists
+  stat:
+    path: '{{ dokuwiki_farm }}/{{ domain }}/'
+  register: animal
+
 - name: copy animal into the farm 
   unarchive:
     src: "{{ animal_source }}"
@@ -20,6 +25,8 @@
     remote_src: true
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
+  when: not animal.stat.exists
 
 - name: rename _animal to domain name
   command: mv {{ dokuwiki_farm }}/_animal {{ dokuwiki_farm }}/{{ domain }}
+  when: not animal.stat.exists
