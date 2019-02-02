@@ -1,0 +1,40 @@
+---
+- name: 'Create ishani web directory'
+  file:
+    path: /srv/www/ishani
+    state: directory
+    owner: web
+    group: www-data
+
+- name: 'Clone lanagame'
+  become_user: 'web'
+  git:
+    repo: https://github.com/geekodour/lanagame.git
+    dest: /srv/www/ishani
+
+- name: 'Add nginx config'
+  template:
+    src: ishani.conf.j2
+    dest: /etc/nginx/sites-available/ishani.conf
+
+- name: add the symlink
+  file:
+    src: /etc/nginx/sites-available/ishani.conf
+    dest: /etc/nginx/sites-enabled/ishani.conf
+    state: link
+  notify:
+    - reload nginx
+
+- name: create log directory
+  file:
+    path: "/var/log/{{ domain }}/"
+    state: directory
+  become_user: root
+
+- name: create log files
+  file:
+    path: "/var/log/{{ domain }}/{{item.filename }}"
+    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }
