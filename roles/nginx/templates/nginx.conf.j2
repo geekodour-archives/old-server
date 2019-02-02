@@ -39,22 +39,6 @@ http {
   server_tokens off;
   {% endblock %}
 
-  {% block cache -%}
-  # Setup the fastcgi cache.
-  {% if 'mastodon' != playbook_name %}
-  fastcgi_buffers {{ nginx_fastcgi_buffers }};
-  fastcgi_buffer_size {{ nginx_fastcgi_buffer_size }};
-  fastcgi_read_timeout {{ nginx_fastcgi_read_timeout }};
-  fastcgi_cache_path {{ nginx_cache_path }} levels=1:2 keys_zone=wordpress:{{ nginx_cache_key_storage_size }} max_size={{ nginx_cache_size }} inactive={{ nginx_cache_inactive }};
-  fastcgi_cache_use_stale updating error timeout invalid_header http_500;
-  fastcgi_cache_lock on;
-  fastcgi_cache_key $realpath_root$scheme$host$request_uri$request_method$http_origin;
-  fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
-  fastcgi_pass_header Set-Cookie;
-  fastcgi_pass_header Cookie;
-  {% endif %}
-  {%- endblock cache %}
-
   {% block mime_types -%}
   # Specify MIME types for files.
   include       h5bp/mime.types;
