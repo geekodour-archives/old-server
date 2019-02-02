@@ -1,0 +1,13 @@
+---
+- name: 'Create blog web directory'
+  file:
+    path: '/srv/www/blog'
+    state: directory
+    owner: web
+    group: www-data
+
+- name: 'Clone blog'
+  git:
+    accept_hostkey: true
+    repo: 'git@github.com:geekodour/blog.git'
+    dest: '/srv/www/blog'

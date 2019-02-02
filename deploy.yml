@@ -13,5 +13,15 @@
   gather_facts: false
   become: true
   roles:
-    - { role: 'nginx' }
-    #- { role: 'backup' }
+    #- { role: 'nginx' }
+    #- { role: 'certbot', domains: ['geekodour.xyz','*.geekodour.xyz']}
+    #- { role: 'common' }
+    - { role: 'blog', domain: 'geekodour.xyz' }
+    #- { role: 'ishani', domain: 'ishani.geekodour.xyz' }
+    #- { role: 'dokuwiki' }
+    #- { role: 'wikianimal', domain: 'wiki.geekodour.xyz' }
+    #- { role: 'prometheus' }
+    #- { role: 'alertmanager' }
+    #- { role: 'grafana', domain: 'probe.geekodour.xyz' }
+    #- { role: 'znc' }
+    #- { role: 'firewall' }

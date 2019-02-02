@@ -1,6 +1,4 @@
 ---
-# file: /roles/common/tasks/main.yml
-
 - name: 'update apt cache'
   apt:
     upgrade: yes
@@ -13,14 +11,25 @@
     state: 'present'
   with_items:
     - {name: git}
-    - {name: fail2ban}
-    - {name: libjemalloc-dev}
-    - {name: libreadline-dev}
-    - {name: zlib1g-dev}
     - {name: build-essential}
     - {name: gcc}
-    - {name: libssl-dev}
 
-- include: fail2ban.yml
+- name: 'Create www-data group'
+  group:
+    name: www-web
+    state: present
 
-- include: ufw.yml
+- name: 'Create web user'
+  user:
+    name: web
+    group: www-web
+    create_home: false
+
+- name: 'Create www directory'
+  file:
+    path: /srv/www/
+    owner: web
+    group: www-data
+    state: directory
+
+#- include: ufw.yml
