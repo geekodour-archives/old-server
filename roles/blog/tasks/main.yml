@@ -7,7 +7,7 @@
     group: www-data
 
 - name: 'Clone blog'
+  become_user: 'web'
   git:
-    accept_hostkey: true
-    repo: 'git@github.com:geekodour/blog.git'
+    repo: 'https://github.com/geekodour/blog.git'
     dest: '/srv/www/blog'
