@@ -1,7 +1,7 @@
 ---
 - name: 'Create blog web directory'
   file:
-    path: '/srv/www/blog'
+    path: /srv/www/blog
     state: directory
     owner: web
     group: www-data
@@ -9,5 +9,32 @@
 - name: 'Clone blog'
   become_user: 'web'
   git:
-    repo: 'https://github.com/geekodour/blog.git'
-    dest: '/srv/www/blog'
+    repo: https://github.com/geekodour/blog.git
+    dest: /srv/www/blog
+
+- name: 'Add nginx config'
+  template:
+    src: blog.conf.j2
+    dest: /etc/nginx/sites-available/blog.conf
+
+- name: add the symlink
+  file:
+    src: /etc/nginx/sites-available/blog.conf
+    dest: /etc/nginx/sites-enabled/blog.conf
+    state: link
+  notify:
+    - reload nginx
+
+- name: create log directory
+  file:
+    path: "/var/log/{{ domain }}/"
+    state: directory
+  become_user: root
+
+- name: create log files
+  file:
+    path: "/var/log/{{ domain }}/{{item.filename }}"
+    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }

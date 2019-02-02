@@ -16,7 +16,7 @@
     #- { role: 'nginx' }
     #- { role: 'certbot', domains: ['geekodour.xyz','*.geekodour.xyz']}
     #- { role: 'common' }
-    - { role: 'blog', domain: 'geekodour.xyz' }
+    - { role: 'blog', domain: 'geekodour.xyz', rootdir: '/srv/www/blog/public'}
     #- { role: 'ishani', domain: 'ishani.geekodour.xyz' }
     #- { role: 'dokuwiki' }
     #- { role: 'wikianimal', domain: 'wiki.geekodour.xyz' }
