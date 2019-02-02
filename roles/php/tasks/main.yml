@@ -11,6 +11,18 @@
     cache_valid_time: "3600"
   with_dict: "{{ php_extensions }}"
 
+- name: PHP configuration file
+  template:
+    src: php.ini.j2
+    dest: /etc/php/7.3/fpm/php.ini
+  notify: reload php-fpm
+
+- name: PHP FPM pool configuration file
+  copy:
+    src: www.conf
+    dest: /etc/php/7.3/fpm/pool.d/www.conf
+  notify: reload php-fpm
+
 - name: Start php7.3-fpm service
   service:
     name: php7.3-fpm
@@ -29,16 +41,4 @@
     enabled: false
   register: service_stopped
   when: php72_status.stat.exists
-  notify: reload php-fpm
-
-- name: PHP configuration file
-  template:
-    src: php.ini.j2
-    dest: /etc/php/7.3/fpm/php.ini
-  notify: reload php-fpm
-
-- name: PHP FPM pool configuration file
-  template:
-    src: www.conf.j2
-    dest: /etc/php/7.3/fpm/pool.d/www.conf
   notify: reload php-fpm

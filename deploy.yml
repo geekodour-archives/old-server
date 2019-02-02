@@ -19,7 +19,7 @@
     #- { role: 'blog', domain: 'geekodour.xyz', rootdir: '/srv/www/blog/public'}
     #- { role: 'ishani', domain: 'ishani.geekodour.xyz', rootdir: '/srv/www/ishani' }
     #- { role: 'dummy', domain: 'dummy.geekodour.xyz', rootdir: '/srv/www/dummy' }
-    #- { role: 'php' }
+    - { role: 'php' }
     - { role: 'dokuwiki', domain: '*.geekodour.xyz'}
     - { role: 'wikianimal', domain: 'wiki.geekodour.xyz' }
     #- { role: 'prometheus' }
