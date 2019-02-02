@@ -1,0 +1,9 @@
+---
+- name: Install server
+  hosts: production_servers
+  remote_user: 'ubuntu'
+  gather_facts: yes
+  become: true
+  roles:
+    #- { role: 'webmin' }
+    #- { role: 'backup' }
