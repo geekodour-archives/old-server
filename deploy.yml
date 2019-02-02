@@ -1,9 +1,16 @@
 ---
+- name: Set ansible_python_interpreter
+  hosts: production_servers
+  gather_facts: false
+  become: yes
+  roles:
+    - { role: python_interpreter, tags: [always] }
+
 - name: Install server
   hosts: production_servers
-  remote_user: 'ubuntu'
+  remote_user: ubuntu
   gather_facts: yes
   become: true
   roles:
-    #- { role: 'webmin' }
+    - { role: 'nginx' }
     #- { role: 'backup' }

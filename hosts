@@ -1,0 +1,4 @@
+server ansible_host=geekodour.xyz
+
+[production_servers]
+server

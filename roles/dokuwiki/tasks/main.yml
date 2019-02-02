@@ -1,0 +1,79 @@
+---
+- name: create web base {{ dokuwiki_base }}
+  file:
+    path: "{{ dokuwiki_base }}"
+    state: directory
+  become: yes
+
+- name: download and extract dokuwiki
+  unarchive:
+    src: "{{ dokuwiki_source }}"
+    dest: "{{ dokuwiki_base }}"
+    remote_src: true
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    extra_opts: ["--strip-components=1"]
+
+- name: copy configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    group: "{{ web_group }}"
+    owner: "{{ web_user }}"
+    mode: 0644
+  become: yes
+  with_items:
+    - { src: local.php.j2, dest: "{{ dokuwiki_base }}/conf/local.php" }
+    - { src: local.protected.php.j2, dest: "{{ dokuwiki_base }}/conf/local.protected.php" }
+    - { src: plugins.local.php.j2, dest: "{{ dokuwiki_base }}/conf/plugins.local.php" }
+    - { src: preload.php.j2, dest: "{{ dokuwiki_base }}/inc/preload.php" }
+
+- name: install few useful plugins
+  unarchive:
+    src: "{{ role_path }}/files/{{ item.name }}.tar"
+    dest: "{{ dokuwiki_base }}/lib/plugins"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+  with_items:
+    - { name: smtp }
+
+- name: remove few unwanted plugins
+  file:
+    path: "{{ dokuwiki_base }}/lib/plugins/{{ item.name }}"
+    state: absent
+  with_items:
+    - { name: authad }
+    - { name: authpdo }
+    - { name: authmysql }
+    - { name: authldap }
+    - { name: authpgsql }
+
+- name: remove install.php
+  file:
+    path: "{{ dokuwiki_base }}/install.php"
+    state: absent
+
+- name: create log directory
+  file:
+    path: "/var/log/{{ nginx_servername }}"
+    state: directory
+  become_user: root
+
+- name: create log files
+  file:
+    path: "/var/log/{{ nginx_servername }}/{{ item.filename }}"
+    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }
+
+- name: copy nginx configuration file
+  template:
+    src: templates/doku.conf.j2
+    dest: /etc/nginx/sites-available/doku.conf
+
+- name: add the symlink
+  file:
+    src: /etc/nginx/sites-available/doku.conf
+    dest: /etc/nginx/sites-enabled/doku.conf
+    state: link

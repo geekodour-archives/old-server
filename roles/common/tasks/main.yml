@@ -1,0 +1,26 @@
+---
+# file: /roles/common/tasks/main.yml
+
+- name: 'update apt cache'
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: 'install common packages'
+  apt:
+    name: '{{ item.name }}'
+    state: 'present'
+  with_items:
+    - {name: git}
+    - {name: fail2ban}
+    - {name: libjemalloc-dev}
+    - {name: libreadline-dev}
+    - {name: zlib1g-dev}
+    - {name: build-essential}
+    - {name: gcc}
+    - {name: libssl-dev}
+
+- include: fail2ban.yml
+
+- include: ufw.yml
