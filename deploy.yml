@@ -18,13 +18,14 @@
     #- { role: 'common' }
     #- { role: 'blog', domain: 'geekodour.xyz', rootdir: '/srv/www/blog/public'}
     #- { role: 'ishani', domain: 'ishani.geekodour.xyz', rootdir: '/srv/www/ishani' }
-    ##- { role: 'dummy', domain: 'dummy.geekodour.xyz', rootdir: '/srv/www/dummy' }
+    - { role: 'dummy', domain: 'dummy.geekodour.xyz', rootdir: '/srv/www/dummy' }
+    - { role: 'dummy2', domain: 'dummy2.geekodour.xyz', rootdir: '/srv/www/dummy2' }
     #- { role: 'php' }
     #- { role: 'dokuwiki', domain: '*.geekodour.xyz'}
     #- { role: 'wikianimal', domain: 'wiki.geekodour.xyz' }
     #- { role: 'prometheus' }
     #- { role: 'alertmanager' }
     #- { role: 'grafana', domain: 'probe.geekodour.xyz' }
-    - { role: 'docker' }
+    #- { role: 'docker' }
     #- { role: 'znc' }
     #- { role: 'firewall' }

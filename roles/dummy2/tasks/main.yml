@@ -1,0 +1,40 @@
+---
+- name: 'Create dummy2 web directory'
+  file:
+    path: /srv/www/dummy2
+    state: directory
+    owner: web
+    group: www-data
+
+- name: 'Clone pdffile webapp'
+  become_user: 'web'
+  git:
+    repo: https://geekodour@bitbucket.org/geekodour/pdffilesnormal.git
+    dest: /srv/www/dummy2
+
+- name: 'Add nginx config'
+  template:
+    src: dummy2.conf.j2
+    dest: /etc/nginx/sites-available/dummy2.conf
+
+- name: add the symlink
+  file:
+    src: /etc/nginx/sites-available/dummy2.conf
+    dest: /etc/nginx/sites-enabled/dummy2.conf
+    state: link
+  notify:
+    - reload nginx
+
+- name: create log directory
+  file:
+    path: "/var/log/{{ domain }}/"
+    state: directory
+  become_user: root
+
+- name: create log files
+  file:
+    path: "/var/log/{{ domain }}/{{item.filename }}"
+    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }
