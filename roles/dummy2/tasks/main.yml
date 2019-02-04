@@ -38,3 +38,8 @@
   with_items:
     - { filename: access.log }
     - { filename: error.log }
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted

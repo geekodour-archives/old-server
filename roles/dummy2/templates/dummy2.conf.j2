@@ -54,5 +54,13 @@ server {
     try_files $uri $uri/ =404;
   }
 
+  location /dirpdf {
+    proxy_pass http://localhost:9001;
+  }
+
+  location ~ \.pdf$ {
+    proxy_pass http://localhost:9001;
+  }
+
   error_page 500 501 502 503 504 /500.html;
 }
