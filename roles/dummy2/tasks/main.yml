@@ -17,13 +17,22 @@
     src: dummy2.conf.j2
     dest: /etc/nginx/sites-available/dummy2.conf
 
+- name: 'Add apache config'
+  template:
+    src: dummy2.apache.conf.j2
+    dest: /etc/apache2/sites-available/dummy2.conf
+
 - name: add the symlink
   file:
     src: /etc/nginx/sites-available/dummy2.conf
     dest: /etc/nginx/sites-enabled/dummy2.conf
     state: link
-  notify:
-    - reload nginx
+
+- name: add the symlink (apache)
+  file:
+    src: /etc/apache2/sites-available/dummy2.conf
+    dest: /etc/apache2/sites-enabled/dummy2.conf
+    state: link
 
 - name: create log directory
   file:
