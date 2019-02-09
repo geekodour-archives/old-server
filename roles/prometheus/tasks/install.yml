@@ -1,4 +1,9 @@
 ---
+
+- name: kasdjasd alksdj
+  debug:
+    msg: '{{ prometheus_source }}'
+
 - name: download prometheus binary to local folder
   become: true
   get_url:
@@ -10,6 +15,7 @@
   until: _download_archive is succeeded
   retries: 5
   delay: 2
+
 
 - name: unpack prometheus binaries
   become: true

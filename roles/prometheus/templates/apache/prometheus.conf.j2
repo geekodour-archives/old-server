@@ -1,9 +1,0 @@
-ProxyPass /{{ prometheus_subdir }} http://localhost:{{ prometheus_port }}/{{ prometheus_subdir }}
-ProxyPassReverse /{{ prometheus_subdir }} http://localhost:{{ prometheus_port }}/{{ prometheus_subdir }}
-
-<Location /{{ prometheus_subdir }}>
-    AuthType Basic
-    AuthName "Restricted Content"
-    AuthUserFile /etc/apache2/.htpasswd
-    Require valid-user
-</Location>

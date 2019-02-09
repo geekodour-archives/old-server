@@ -32,4 +32,9 @@
     group: www-data
     state: directory
 
+- name: create directory to store systemd units
+  file:
+    path: /usr/lib/systemd/system/
+    state: directory
+
 #- include: ufw.yml

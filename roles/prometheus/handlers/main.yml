@@ -11,3 +11,12 @@
   systemd:
     name: prometheus
     state: reloaded
+
+- name: reload nginx
+  command: nginx -t
+  notify: perform nginx reload
+
+- name: perform nginx reload
+  service:
+    name: nginx
+    state: restarted
