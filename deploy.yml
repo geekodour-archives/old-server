@@ -25,7 +25,7 @@
     ##- { role: 'dummy2', domain: 'dummy2.geekodour.xyz', rootdir: '/srv/www/dummy2' }
     #- { role: 'dokuwiki', domain: '*.geekodour.xyz'}
     #- { role: 'wikianimal', domain: 'wiki.geekodour.xyz' }
-    - { role: 'prometheus', domain: 'prom.geekodour.xyz' }
-    #- { role: 'alertmanager', domain: 'alerts.geekodour.xyz' }
+    #- { role: 'prometheus', domain: 'prom.geekodour.xyz' }
+    - { role: 'alertmanager', domain: 'alerts.geekodour.xyz' }
     #- { role: 'grafana', domain: 'grafana.geekodour.xyz' }
     #- { role: 'firewall' }

@@ -1,0 +1,39 @@
+---
+- name: download alertmanager binary to local folder
+  become: true
+  get_url:
+    url: '{{ alertmanager_source }}'
+    dest: "/tmp/{{ alertmanager_download_dirname }}.tar.gz"
+    checksum: "sha256:{{ alertmanager_checksum }}"
+  delegate_to: localhost
+  register: _download_archive
+  until: _download_archive is succeeded
+  retries: 5
+  delay: 2
+
+- name: unpack alertmanager binaries
+  become: true
+  unarchive:
+    src: "/tmp/{{ alertmanager_download_dirname }}.tar.gz"
+    dest: "/tmp/"
+  delegate_to: localhost
+
+- name: propagate alertmanager binaries alertmanager and amtool
+  copy:
+    src: "/tmp/{{ alertmanager_download_dirname }}/{{item}}"
+    dest: "/usr/local/bin/{{ item }}"
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - alertmanager
+    - amtool
+
+- name: create systemd service unit
+  template:
+    src: alertmanager.service.j2
+    dest: /usr/lib/systemd/system/alertmanager.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart alertmanager

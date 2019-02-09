@@ -1,0 +1,27 @@
+---
+- name: 'Add nginx config'
+  template:
+    src: alertmanager.conf.j2
+    dest: /etc/nginx/sites-available/alertmanager.conf
+
+- name: add the symlink
+  file:
+    src: /etc/nginx/sites-available/alertmanager.conf
+    dest: /etc/nginx/sites-enabled/alertmanager.conf
+    state: link
+  notify:
+    - reload nginx
+
+- name: create log directory
+  file:
+    path: "/var/log/{{ domain }}/"
+    state: directory
+  become_user: root
+
+- name: create log files
+  file:
+    path: "/var/log/{{ domain }}/{{item.filename }}"
+    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }

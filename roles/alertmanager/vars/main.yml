@@ -1,0 +1,15 @@
+---
+alertmanager_version: '0.16.1'
+alertmanager_source: 'https://github.com/prometheus/alertmanager/releases/download/v{{ alertmanager_version }}/alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz'
+alertmanager_checksum: 60f37a73f42e2d51e1dba319b75875a1ab5e0bf71944ad4efb735468f7c081c4
+alertmanager_download_dirname: 'alertmanager-{{ alertmanager_version }}.linux-amd64'
+
+#alertmanager_prefix: 'alerts'
+alertmanager_port: '9093'
+#alertmanager_gossip_port: '9094'
+#alertmanager_web_external_url: 'https://{{ ansible_fqdn }}/{{ alertmanager_prefix }}/'
+#alertmanager_web_listen_address: "0.0.0.0:{{alertmanager_port}}"
+#alertmanager_cluster_listen_address: '0.0.0.0:{{ alertmanager_gossip_port }}'
+
+alertmanager_config_dir: /etc/alertmanager
+alertmanager_db_dir: /var/lib/alertmanager

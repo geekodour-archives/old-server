@@ -1,0 +1,24 @@
+---
+- name: configure alertmanager
+  template:
+    src: "alertmanager.yml.j2"
+    dest: "{{ alertmanager_config_dir }}/alertmanager.yml"
+    force: true
+    owner: root
+    group: alertmanager
+    mode: 0755
+    validate: "/usr/local/bin/amtool --alertmanager.url=  check-config %s"
+  notify:
+    - reload alertmanager
+
+- name: copy alertmanager templates
+  copy:
+    src: "{{ item }}"
+    dest: '{{ alertmanager_config_dir }}/templates/'
+    owner: root
+    group: alertmanager
+    mode: 0755
+  with_fileglob:
+    - '{{ role_path }}/files/*.tmpl'
+  notify:
+    - reload alertmanager

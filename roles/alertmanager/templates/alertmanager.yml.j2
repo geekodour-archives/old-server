@@ -1,0 +1,27 @@
+# {{ ansible_managed }}
+
+global:
+  resolve_timeout: 3m
+  smtp_smarthost: 'localhost:25'
+  smtp_from: 'alerts@{{ ansible_fqdn }}'
+  smtp_require_tls: false
+
+templates:
+- '{{ alertmanager_config_dir }}/templates/*.tmpl'
+
+route:
+  repeat_interval: 3h
+  group_by: ['alertname', 'job']
+  group_wait: 30s
+  group_interval: 5m
+  receiver: sysadmin-team-mail
+
+receivers:
+- name: sysadmin-team-mail
+  email_configs:
+  - to: 'hrishikeshbman@gmail.com'
+    {% raw -%}
+    html: '{{ template "email.default.html" . }}'
+    text: '{{ template "email.default.text" . }}'
+    {% endraw -%}
+    send_resolved: true

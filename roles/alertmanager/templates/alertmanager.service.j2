@@ -1,0 +1,24 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=Prometheus Alertmanager
+Documentation=https://github.com/prometheus/alertmanager
+After=network.target
+
+[Service]
+User=alertmanager
+Group=alertmanager
+Type=simple
+Environment="GOMAXPROCS={{ ansible_processor_vcpus|default(ansible_processor_count) }}"
+ExecStart=/usr/local/bin/alertmanager \
+          --config.file={{ alertmanager_config_dir }}/alertmanager.yml \
+          --storage.path={{ alertmanager_db_dir }}
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+KillMode=mixed
+
+SyslogIdentifier=alertmanager
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,25 @@
+---
+- name: create alertmanager group
+  group:
+    name: alertmanager
+    system: true
+    state: present
+
+- name: create alertmanager user
+  user:
+    name: alertmanager
+    group: alertmanager
+    system: yes
+    create_home: no
+
+- name: create alertmanager directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: alertmanager
+    group: alertmanager
+    mode: 0755
+  with_items:
+    - "{{ alertmanager_config_dir }}"
+    - "{{ alertmanager_config_dir }}/templates"
+    - "{{ alertmanager_db_dir }}"
