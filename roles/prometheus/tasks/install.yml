@@ -1,0 +1,49 @@
+---
+- name: download prometheus binary to local folder
+  become: true
+  get_url:
+    url: '{{ prometheus_source }}'
+    dest: "/tmp/{{ prometheus_download_dirname }}.tar.gz"
+    checksum: "sha256:{{ prometheus_checksum }}"
+  delegate_to: localhost
+  register: _download_archive
+  until: _download_archive is succeeded
+  retries: 5
+  delay: 2
+
+- name: unpack prometheus binaries
+  become: true
+  unarchive:
+    src: "/tmp/{{ prometheus_download_dirname }}.tar.gz"
+    dest: "/tmp/"
+  delegate_to: localhost
+
+- name: propagate prometheus and promtool binaries
+  copy:
+    src: "/tmp/{{prometheus_download_dirname}}/{{item}}"
+    dest: "/usr/local/bin/{{ item }}"
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - prometheus
+    - promtool
+
+- name: propagate console templates
+  copy:
+    src: "/tmp/{{prometheus_download_dirname}}/{{item}}"
+    dest: "{{ prometheus_config_dir }}/{{ item }}/"
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - console_libraries
+    - consoles
+
+- name: create systemd service unit
+  template:
+    src: prometheus.service.j2
+    dest: /usr/lib/systemd/system/prometheus.service
+    owner: root
+    group: root
+    mode: 0644

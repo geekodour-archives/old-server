@@ -1,0 +1,21 @@
+---
+- include: preflight.yml
+  become: true
+
+- include: install.yml
+  become: true
+
+- include: configure.yml
+  become: true
+
+- include: nginxproxy.yml
+  become: true
+  ignore_errors: true
+
+- name: ensure prometheus service is started and enabled
+  become: true
+  systemd:
+    daemon_reload: true
+    name: prometheus
+    state: started
+    enabled: true

@@ -1,0 +1,12 @@
+---
+groups:
+- name: alertmanager.yml
+  rules:
+  - alert: AlertmanagerNotificationsFailing
+    expr: rate(alertmanager_notifications_failed_total[1m]) > 0
+    labels:
+      service: alertmanager
+      severity: critical
+    annotations:
+      title: Alertmanager is failing sending notications
+      description: Alertmanager is seeing errors for integration {{$labels.integration}}

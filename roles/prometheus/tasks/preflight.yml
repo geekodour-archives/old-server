@@ -1,0 +1,41 @@
+---
+- name: create prometheus group
+  group:
+    name: prometheus
+    system: true
+    state: present
+
+- name: create prometheus user
+  user:
+    name: prometheus
+    group: prometheus
+    system: yes
+    create_home: no
+
+- name: create prometheus data directory
+  file:
+    path: "{{ prometheus_db_dir }}"
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: 0755
+
+- name: create prometheus configuration directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: prometheus
+    mode: 0750
+  with_items:
+    - "{{ prometheus_config_dir }}"
+    - "{{ prometheus_config_dir }}/conf.d"
+    - "{{ prometheus_config_dir }}/rules"
+    - "{{ prometheus_config_dir }}/alerts"
+    - "{{ prometheus_targets_dir }}"
+
+- name: Get systemd version
+  shell: systemctl --version | awk '$1 == "systemd" {print $2}'
+  changed_when: false
+  check_mode: false
+  register: prometheus_systemd_version

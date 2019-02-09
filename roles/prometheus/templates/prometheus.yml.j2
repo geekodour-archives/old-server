@@ -1,0 +1,37 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
+{{ ansible_managed | comment }}
+# http://prometheus.io/docs/operating/configuration/
+
+global:
+  scrape_interval:     1m
+  scrape_timeout:      10s
+  evaluation_interval: 1m
+
+rule_files:
+  - {{ prometheus_config_dir }}/rules/*.yml
+  - {{ prometheus_config_dir }}/alerts/*.yml
+
+alerting:
+  alertmanagers:
+  - static_configs:
+      - targets:
+        - 'localhost:9093'
+
+scrape_configs:
+  # monitor the promethus servers
+  - job_name: 'prometheus'
+    static_configs:
+      - targets:
+        - 'localhost:9090'
+
+  # monitor the alertmanager servers
+  - job_name: 'alertmanager'
+    static_configs:
+      - targets:
+        - 'localhost:9093'
+
+  # monitor the exporters added by `service_discovery` role
+  - job_name: 'overwritten-default'
+    file_sd_configs:
+    - files:
+        - '{{ prometheus_targets_dir }}/*.json'

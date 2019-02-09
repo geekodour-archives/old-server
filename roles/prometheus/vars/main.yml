@@ -1,0 +1,42 @@
+---
+prometheus_port: '9090'
+#prometheus_subdir: 'prom'
+prometheus_config_dir: /etc/prometheus
+prometheus_db_dir: /var/lib/prometheus
+prometheus_targets_dir: '{{ prometheus_config_dir }}/file_sd'
+#prometheus_web_listen_address: "0.0.0.0:{{prometheus_port}}"
+#prometheus_web_external_url: 'https://{{ ansible_fqdn }}/{{prometheus_subdir}}/'
+prometheus_storage_retention: "15d"
+prometheus_config_flags_extra: {}
+prometheus_alert_relabel_configs: []
+use_backup: false
+
+####################################################
+## INSTALLATION VARS
+####################################################
+prometheus_version: '2.7.1'
+prometheus_download_dirname: prometheus-{{ prometheus_version }}.linux-amd64
+prometheus_source: 'https://github.com/prometheus/prometheus/releases/download/v{{prometheus_version}}/{{prometheus_download_dirname}}.tar.gz'
+prometheus_checksum: '7837cfd6b5af63c07cadfa2b3118f0a43e43e8a6e6d596425cb23b45855b7db0'
+
+####################################################
+## ALERTMANAGER RELATED VARS
+####################################################
+#alertmanager_path_prefix: 'alerts'
+alertmanager_port: '9093'
+
+
+####################################################
+## FIREWALL RELATED VARS
+####################################################
+#allow_outbound_ports:
+#    - '9100' # node_exporter
+
+# the following inbound ports will only be accessible by hosts in [monitoring_servers] ansible group
+# needed for one prometheus server to monitor the other ones
+#allow_inbound_ports:
+#    - '9090' # prometheus
+#    - '9093' # alertmanager
+#    - '9094' # alertmanager peer
+#    - '9115' # blackbox_exporter
+#    - '443'  # grafana datasource ( uses the apache proxy )

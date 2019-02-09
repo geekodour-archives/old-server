@@ -1,0 +1,27 @@
+---
+- name: 'Add nginx config'
+  template:
+    src: prometheus.conf.j2
+    dest: /etc/nginx/sites-available/prometheus.conf
+
+- name: add the symlink
+  file:
+    src: /etc/nginx/sites-available/prometheus.conf
+    dest: /etc/nginx/sites-enabled/prometheus.conf
+    state: link
+  notify:
+    - reload nginx
+
+- name: create log directory
+  file:
+    path: "/var/log/{{ domain }}/"
+    state: directory
+  become_user: root
+
+- name: create log files
+  file:
+    path: "/var/log/{{ domain }}/{{item.filename }}"
+    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }
