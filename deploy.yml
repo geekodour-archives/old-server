@@ -26,6 +26,6 @@
     #- { role: 'dokuwiki', domain: '*.geekodour.xyz'}
     #- { role: 'wikianimal', domain: 'wiki.geekodour.xyz' }
     #- { role: 'prometheus', domain: 'prom.geekodour.xyz' }
-    - { role: 'alertmanager', domain: 'alerts.geekodour.xyz' }
-    #- { role: 'grafana', domain: 'grafana.geekodour.xyz' }
+    #- { role: 'alertmanager', domain: 'alerts.geekodour.xyz' }
+    - { role: 'grafana', domain: 'grafana.geekodour.xyz' }
     #- { role: 'firewall' }

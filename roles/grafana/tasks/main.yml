@@ -1,0 +1,35 @@
+---
+- name: run docker image
+  become: true
+  command: 'docker run -d -p 3000:3000 grafana/grafana'
+  ignore_errors: true
+
+- name: 'Add nginx config'
+  template:
+    src: grafana.conf.j2
+    dest: /etc/nginx/sites-available/grafana.conf
+
+- name: add the symlink
+  file:
+    src: /etc/nginx/sites-available/grafana.conf
+    dest: /etc/nginx/sites-enabled/grafana.conf
+    state: link
+
+- name: create log directory
+  file:
+    path: "/var/log/{{ domain }}/"
+    state: directory
+  become_user: root
+
+- name: create log files
+  file:
+    path: "/var/log/{{ domain }}/{{item.filename }}"
+    state: touch
+  with_items:
+    - { filename: access.log }
+    - { filename: error.log }
+
+- name: Restart nginx
+  service:
+    name: "nginx"
+    state: "restarted"
