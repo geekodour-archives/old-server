@@ -20,7 +20,6 @@
     #- { role: 'docker' }
     #- { role: 'certbot', domains: ['geekodour.xyz','*.geekodour.xyz']}
     - { role: 'blog', domain: 'geekodour.xyz', rootdir: '/srv/www/blog/public', tags: ['blog']}
-    #- { role: 'ishani', domain: 'ishani.geekodour.xyz', rootdir: '/srv/www/ishani' }
     ##- { role: 'dummy', domain: 'dummy.geekodour.xyz', rootdir: '/srv/www/dummy' }
     ##- { role: 'dummy2', domain: 'dummy2.geekodour.xyz', rootdir: '/srv/www/dummy2' }
     #- { role: 'dokuwiki', domain: '*.geekodour.xyz'}
